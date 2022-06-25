@@ -156,7 +156,7 @@ def main():
 	N         = 4000    # Number of particles
 	t         = 0      # current time of the simulation
 	tEnd      = 15    # time at which simulation ends
-	dt        = 0.01   # timestep
+	dt        = 0.1   # timestep
 	M         = 2      # star mass
 	R         = 0.75   # star radius
 	h         = 0.1    # smoothing length
@@ -170,8 +170,8 @@ def main():
 	
 	lmbda = 2*k*(1+n)*np.pi**(-3/(2*n)) * (M*gamma(5/2+n)/R**3/gamma(1+n))**(1/n) / R**2  # ~ 2.01
 	m     = M/N                    # single particle mass
-	pos   = np.random.randn(N,3)   # randomly selected positions and velocities
-	vel   = np.zeros(pos.shape)
+	pos   = np.random.randn(N,3)   # randomly selected positions
+	vel   = np.zeros(pos.shape)		# initial velocities 0
 	
 	# calculate initial gravitational accelerations
 	acc = getAcc( pos, vel, m, h, k, n, lmbda, nu )
@@ -180,7 +180,7 @@ def main():
 	Nt = int(np.ceil(tEnd/dt))
 	
 	# prep figure
-	fig = plt.figure(figsize=(8,8), dpi=80)
+	fig = plt.figure(figsize=(12,12), dpi=80)
 	ax = plt.axes()
 	ax.set_facecolor('black')
 	# grid = plt.GridSpec(3, 1, wspace=0.0, hspace=0.3)
@@ -216,10 +216,10 @@ def main():
 		plt.cla()
 		plt.scatter(pos[:,0],pos[:,1], c=cval, cmap=plt.cm.autumn, s=10, alpha=0.5)
 		ax.set_aspect('equal', 'box')
-		plt.xlim(-1.4, 1.4)
-		plt.ylim(-1.2, 1.2)
-		plt.xticks([-1,0,1])
-		plt.yticks([-1,0,1])
+		plt.xlim(-2, 2)
+		plt.ylim(-2, 2)
+		plt.xticks([-2,0,2])
+		plt.yticks([-2,0,2])
 		
 		# plt.sca(ax2)
 		# plt.cla()
@@ -240,9 +240,9 @@ def main():
 	FFMpegWriter = manimation.writers['ffmpeg']
 	metadata = dict(title='test', artist='Matplotlib',
                 comment='-')
-	writer = FFMpegWriter(fps=15, metadata=metadata, bitrate=1800)
+	writer = FFMpegWriter(fps=30, metadata=metadata, bitrate=1800)
 
-	ani = manimation.FuncAnimation(fig, animate,frames=1500, repeat=False)
+	ani = manimation.FuncAnimation(fig, animate, frames=300, repeat=False)
 	ani.save("test.mp4", writer=writer)
 
 	# # add labels/legend
